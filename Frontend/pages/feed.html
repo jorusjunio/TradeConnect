@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed - TradeConnect</title>
+    
+    <!-- Load CSS in this ORDER -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-auth">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="feed.html"><h1>📈 TradeConnect</h1></a>
+            </div>
+            <div class="nav-links">
+                <a href="feed.html" class="active">Feed</a>
+                <a href="explore.html">Explore</a>
+                <a href="#" id="profileLink">Profile</a>
+                <button class="btn-secondary" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="feed-layout">
+                <!-- Left Sidebar -->
+                <aside class="sidebar-left">
+                    <div class="profile-card">
+                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" alt="Profile" class="profile-avatar">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userBio" class="text-muted"></p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value" id="userPosts">0</span>
+                                <span class="stat-label">Posts</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="userFollowers">0</span>
+                                <span class="stat-label">Followers</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="userFollowing">0</span>
+                                <span class="stat-label">Following</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="markets-card">
+                        <h4>Markets</h4>
+                        <a href="#" class="market-link" data-market="Forex">💱 Forex</a>
+                        <a href="#" class="market-link" data-market="Crypto">₿ Crypto</a>
+                        <a href="#" class="market-link" data-market="Stocks">📈 Stocks</a>
+                        <a href="#" class="market-link" data-market="Commodities">🛢️ Commodities</a>
+                    </div>
+                </aside>
+
+                <!-- Main Feed -->
+                <main class="feed-main">
+                    <!-- Create Post -->
+                    <div class="create-post-card">
+                        <form id="createPostForm">
+                            <textarea 
+                                id="postContent" 
+                                placeholder="Share your trading strategy or insight..."
+                                rows="3"
+                                required
+                            ></textarea>
+                            
+                            <div class="post-options">
+                                <div class="post-tags">
+                                    <select id="marketTag" name="market_tag">
+                                        <option value="">Select Market</option>
+                                        <option value="Forex">Forex</option>
+                                        <option value="Crypto">Crypto</option>
+                                        <option value="Stocks">Stocks</option>
+                                        <option value="Commodities">Commodities</option>
+                                    </select>
+                                    <input 
+                                        type="text" 
+                                        id="strategyTag" 
+                                        name="strategy_tag" 
+                                        placeholder="Strategy tag (e.g., Technical Analysis)"
+                                    >
+                                    <input 
+                                        type="url" 
+                                        id="imageUrl" 
+                                        name="image_url" 
+                                        placeholder="Image URL (optional)"
+                                    >
+                                </div>
+                                <button type="submit" class="btn-primary" id="postBtn">Post</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Feed Filter -->
+                    <div class="feed-filter">
+                        <button class="filter-btn active" data-filter="feed">Following</button>
+                        <button class="filter-btn" data-filter="all">All Posts</button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loadingState" class="loading-state">
+                        <p>Loading posts...</p>
+                    </div>
+
+                    <!-- Posts Container -->
+                    <div id="postsContainer" class="posts-container">
+                        <!-- Posts will be loaded here dynamically -->
+                    </div>
+
+                    <!-- Load More -->
+                    <div class="load-more" id="loadMoreContainer" style="display: none;">
+                        <button class="btn-secondary" id="loadMoreBtn">Load More</button>
+                    </div>
+                </main>
+
+                <!-- Right Sidebar -->
+                <aside class="sidebar-right">
+                    <div class="suggestions-card">
+                        <h4>Suggested Traders</h4>
+                        <div id="suggestedTraders">
+                            <!-- Suggested traders will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="trending-card">
+                        <h4>Trending Markets</h4>
+                        <div class="trending-list">
+                            <div class="trending-item">
+                                <span class="trending-name">💱 EUR/USD</span>
+                                <span class="trending-change positive">+0.5%</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trending-name">₿ BTC/USD</span>
+                                <span class="trending-change positive">+2.3%</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trending-name">📈 AAPL</span>
+                                <span class="trending-change negative">-1.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/feed.js"></script>
+</body>
+</html>

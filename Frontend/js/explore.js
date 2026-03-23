@@ -3,6 +3,8 @@
 
 const Explore = {
     traders: [],
+    currentUser: null,
+    followStatus: {}, // Track follow status for each trader
     filters: {
         search: '',
         trading_style: '',
@@ -16,9 +18,12 @@ const Explore = {
     async init() {
         // Check authentication
         if (!API.isAuthenticated()) {
-            window.location.href = '/pages/login.html';
+            window.location.href = './login.html';
             return;
         }
+        
+        // Get current user
+        this.currentUser = Auth.getCurrentUser();
         
         // Setup search
         this.setupSearch();
@@ -70,34 +75,26 @@ const Explore = {
      * Setup filter buttons
      */
     setupFilters() {
-        // Trading style filters
-        document.querySelectorAll('[data-filter-type="trading_style"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.setFilter('trading_style', btn.dataset.filterValue);
-                this.updateFilterUI('trading_style', btn);
+        // Trading style filter select
+        const tradingStyleFilter = document.getElementById('tradingStyleFilter');
+        if (tradingStyleFilter) {
+            tradingStyleFilter.addEventListener('change', (e) => {
+                this.setFilter('trading_style', e.target.value);
             });
-        });
+        }
         
-        // Experience level filters
-        document.querySelectorAll('[data-filter-type="experience"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.setFilter('experience_level', btn.dataset.filterValue);
-                this.updateFilterUI('experience', btn);
+        // Experience level filter select
+        const experienceFilter = document.getElementById('experienceFilter');
+        if (experienceFilter) {
+            experienceFilter.addEventListener('change', (e) => {
+                this.setFilter('experience_level', e.target.value);
             });
-        });
+        }
         
-        // Market filters
-        document.querySelectorAll('[data-filter-type="market"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.setFilter('market', btn.dataset.filterValue);
-                this.updateFilterUI('market', btn);
-            });
-        });
-        
-        // Clear filters button
-        const clearBtn = document.getElementById('clearFilters');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => {
+        // Reset filters button
+        const resetBtn = document.getElementById('resetFiltersBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
                 this.clearFilters();
             });
         }
@@ -109,19 +106,6 @@ const Explore = {
     setFilter(type, value) {
         this.filters[type] = value;
         this.loadTraders();
-    },
-    
-    /**
-     * Update filter button UI
-     */
-    updateFilterUI(type, activeBtn) {
-        // Remove active class from all buttons of this type
-        document.querySelectorAll(`[data-filter-type="${type}"]`).forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // Add active class to clicked button
-        activeBtn.classList.add('active');
     },
     
     /**
@@ -139,10 +123,12 @@ const Explore = {
         const searchInput = document.getElementById('searchInput');
         if (searchInput) searchInput.value = '';
         
-        // Remove active class from all filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
+        // Reset select dropdowns
+        const tradingStyleFilter = document.getElementById('tradingStyleFilter');
+        if (tradingStyleFilter) tradingStyleFilter.value = '';
+        
+        const experienceFilter = document.getElementById('experienceFilter');
+        if (experienceFilter) experienceFilter.value = '';
         
         // Reload traders
         this.loadTraders();
@@ -167,6 +153,18 @@ const Explore = {
             const data = await API.get(url);
             
             this.traders = data.users;
+            
+            // Check follow status for each trader
+            if (this.currentUser) {
+                for (const trader of this.traders) {
+                    try {
+                        const followData = await API.get(CONFIG.ENDPOINTS.CHECK_FOLLOW.replace(':userId', trader.id));
+                        this.followStatus[trader.id] = followData.is_following > 0;
+                    } catch (error) {
+                        this.followStatus[trader.id] = false;
+                    }
+                }
+            }
             
             // Render traders
             this.renderTraders();
@@ -208,14 +206,16 @@ const Explore = {
      * Render single trader card
      */
     renderTraderCard(trader) {
+        const isFollowing = this.followStatus[trader.id] || false;
+        
         return `
-            <div class="trader-card">
+            <div class="trader-card" onclick="Explore.goToProfile(${trader.id})">
                 <div class="trader-card-header">
                     <img src="${trader.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(trader.name)}" 
                          alt="${trader.name}" 
                          class="avatar avatar-lg">
                     <div class="trader-card-info">
-                        <h4><a href="/pages/profile.html?id=${trader.id}">${this.escapeHtml(trader.name)}</a></h4>
+                        <h4>${this.escapeHtml(trader.name)}</h4>
                         <p>${trader.trading_style || 'Trader'} • ${trader.experience_level || 'Beginner'}</p>
                     </div>
                 </div>
@@ -239,7 +239,9 @@ const Explore = {
                     </div>
                 </div>
                 
-                <a href="/pages/profile.html?id=${trader.id}" class="btn-primary btn-full">View Profile</a>
+                <button class="btn-full follow-btn ${isFollowing ? 'following' : ''}" data-trader-id="${trader.id}" onclick="event.stopPropagation(); Explore.toggleFollow(${trader.id})">
+                    ${isFollowing ? '✓ Following' : '+ Follow'}
+                </button>
             </div>
         `;
     },
@@ -248,13 +250,12 @@ const Explore = {
      * Show loading
      */
     showLoading() {
+        const loadingState = document.getElementById('loadingState');
+        if (loadingState) loadingState.style.display = 'block';
+        
         const container = document.getElementById('tradersGrid');
         if (container) {
-            container.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                </div>
-            `;
+            container.innerHTML = '';
         }
     },
     
@@ -264,6 +265,44 @@ const Explore = {
     hideLoading() {
         const loading = document.querySelector('.loading');
         if (loading) loading.remove();
+        
+        // Hide loading state div
+        const loadingState = document.getElementById('loadingState');
+        if (loadingState) loadingState.style.display = 'none';
+    },
+    
+    /**
+     * Go to trader profile
+     */
+    goToProfile(traderId) {
+        window.location.href = './profile.html?id=${traderId}';
+    },
+    
+    /**
+     * Toggle follow/unfollow
+     */
+    async toggleFollow(traderId) {
+        try {
+            if (this.followStatus[traderId]) {
+                // Unfollow
+                await API.delete(CONFIG.ENDPOINTS.FOLLOW.replace(':userId', traderId));
+                this.followStatus[traderId] = false;
+            } else {
+                // Follow
+                await API.post(CONFIG.ENDPOINTS.FOLLOW.replace(':userId', traderId));
+                this.followStatus[traderId] = true;
+            }
+            
+            // Re-render traders to update button state
+            this.renderTraders();
+            
+            // Show message
+            const action = this.followStatus[traderId] ? 'followed' : 'unfollowed';
+            Auth.showMessage(`Trader ${action}!`, 'success');
+        } catch (error) {
+            console.error('Toggle follow error:', error);
+            Auth.showMessage(error.message || 'Failed to update follow status', 'error');
+        }
     },
     
     /**
@@ -288,3 +327,5 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = Explore;
 }
+
+

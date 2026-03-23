@@ -13,28 +13,132 @@ const Feed = {
         this.currentUser = Auth.getCurrentUser();
         
         if (!this.currentUser) {
-            window.location.href = '/pages/login.html';
+            window.location.href = './login.html';
             return;
         }
         
+        // Display current user profile in sidebar
+        this.displayCurrentUserProfile();
+        
         // Setup event listeners
         this.setupCreatePost();
-        this.setupInfiniteScroll();
+        this.setupFilterButtons();
+        this.setupMarketLinks();
+        this.setupCommentsModal();
+        this.setupLoadMoreButton();
         
         // Load initial posts
         await this.loadFeed();
     },
     
     /**
+     * Display current user profile in sidebar
+     */
+    displayCurrentUserProfile() {
+        if (!this.currentUser) return;
+        
+        // Update user name
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) {
+            userNameEl.textContent = this.currentUser.name || 'User';
+        }
+        
+        // Update user avatar
+        const userAvatarEl = document.getElementById('userAvatar');
+        if (userAvatarEl) {
+            userAvatarEl.src = this.currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(this.currentUser.name || 'User')}`;
+        }
+        
+        // Update user bio/trading style
+        const userBioEl = document.getElementById('userBio');
+        if (userBioEl) {
+            userBioEl.textContent = this.currentUser.trading_style || this.currentUser.bio || '';
+        }
+        
+        // Update stats placeholders (will be updated when loading feed data)
+        const userPostsEl = document.getElementById('userPosts');
+        if (userPostsEl) {
+            userPostsEl.textContent = this.currentUser.posts_count || '0';
+        }
+        
+        const userFollowersEl = document.getElementById('userFollowers');
+        if (userFollowersEl) {
+            userFollowersEl.textContent = this.currentUser.followers_count || '0';
+        }
+    },
+    
+    /**
+     * Setup comments modal
+     */
+    setupCommentsModal() {
+        const closeBtn = document.getElementById('closeCommentsBtn');
+        const addCommentForm = document.getElementById('addCommentForm');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeCommentsModal();
+            });
+        }
+        
+        if (addCommentForm) {
+            addCommentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.submitComment();
+            });
+        }
+    },
+    
+    /**
+     * Setup feed filter buttons
+     */
+    setupFilterButtons() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // TODO: Load feed based on filter
+                // const filter = btn.dataset.filter;
+                // this.loadFeed(0, filter);
+            });
+        });
+    },
+    
+    /**
+     * Setup market links in sidebar
+     */
+    setupMarketLinks() {
+        const marketLinks = document.querySelectorAll('.market-link');
+        
+        marketLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const market = link.dataset.market;
+                // TODO: Filter posts by market
+                Auth.showMessage(`Filter by ${market} market (coming soon)`, 'info');
+            });
+        });
+    },
+    
+    /**
      * Setup create post functionality
      */
     setupCreatePost() {
-        const createPostBtn = document.getElementById('createPostBtn');
-        const postContentInput = document.getElementById('postContent');
+        const createPostForm = document.getElementById('createPostForm');
         
-        if (!createPostBtn || !postContentInput) return;
+        if (!createPostForm) return;
         
-        createPostBtn.addEventListener('click', async () => {
+        createPostForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const postContentInput = document.getElementById('postContent');
             const content = postContentInput.value.trim();
             
             if (!content) {
@@ -42,18 +146,27 @@ const Feed = {
                 return;
             }
             
-            await this.createPost({
-                content,
-                market_tag: document.getElementById('marketTag')?.value || null,
-                strategy_tag: document.getElementById('strategyTag')?.value || null,
-                image_url: document.getElementById('imageUrl')?.value || null
-            });
+            const postBtn = document.querySelector('#createPostForm button[type="submit"]');
+            const originalText = postBtn.textContent;
             
-            // Clear form
-            postContentInput.value = '';
-            if (document.getElementById('marketTag')) document.getElementById('marketTag').value = '';
-            if (document.getElementById('strategyTag')) document.getElementById('strategyTag').value = '';
-            if (document.getElementById('imageUrl')) document.getElementById('imageUrl').value = '';
+            try {
+                postBtn.disabled = true;
+                postBtn.textContent = 'Posting...';
+                
+                await this.createPost({
+                    content,
+                    market_tag: document.getElementById('marketTag')?.value || null,
+                    strategy_tag: document.getElementById('strategyTag')?.value || null,
+                    image_url: document.getElementById('imageUrl')?.value || null
+                });
+                
+                // Clear form
+                createPostForm.reset();
+                
+            } finally {
+                postBtn.disabled = false;
+                postBtn.textContent = originalText;
+            }
         });
     },
     
@@ -111,7 +224,8 @@ const Feed = {
      * Render posts to DOM
      */
     renderPosts() {
-        const feedContainer = document.getElementById('feedContainer');
+        const feedContainer = document.getElementById('postsContainer');
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
         
         if (!feedContainer) return;
         
@@ -128,11 +242,16 @@ const Feed = {
                     <a href="/pages/explore.html" class="btn-primary">Explore Traders</a>
                 </div>
             `;
+            // Hide load more button
+            if (loadMoreContainer) loadMoreContainer.style.display = 'none';
             return;
         }
         
         // Render posts
         feedContainer.innerHTML = this.posts.map(post => this.renderPostCard(post)).join('');
+        
+        // Show load more button if there are posts
+        if (loadMoreContainer) loadMoreContainer.style.display = 'block';
         
         // Attach event listeners
         this.attachPostEventListeners();
@@ -144,6 +263,7 @@ const Feed = {
     renderPostCard(post) {
         const timeAgo = this.getTimeAgo(post.created_at);
         const isLiked = post.user_liked > 0;
+        const isOwnPost = this.currentUser && this.currentUser.id == post.user_id;
         
         return `
             <div class="post-card" data-post-id="${post.id}">
@@ -152,9 +272,24 @@ const Feed = {
                          alt="${post.user_name}" 
                          class="post-avatar">
                     <div class="post-user-info">
-                        <h4><a href="/pages/profile.html?id=${post.user_id}">${post.user_name}</a></h4>
+                        <h4><a href="./profile.html?id=${post.user_id}">${post.user_name}</a></h4>
                         <p>${post.trading_style || 'Trader'} • ${timeAgo}</p>
                     </div>
+                    ${isOwnPost ? `
+                        <div class="post-options-container">
+                            <button class="post-options-btn" data-post-id="${post.id}" title="Post options">
+                                <span>⋮</span>
+                            </button>
+                            <div class="post-options-menu" style="display: none;">
+                                <button class="post-option-item edit-post-btn" data-post-id="${post.id}">✏️ Edit</button>
+                                <button class="post-option-item save-post-btn" data-post-id="${post.id}">🔖 Save</button>
+                                <button class="post-option-item pin-post-btn" data-post-id="${post.id}">📌 Pin to profile</button>
+                                <button class="post-option-item audience-btn" data-post-id="${post.id}">👥 Edit Audience</button>
+                                <button class="post-option-item archive-btn" data-post-id="${post.id}">📦 Archive</button>
+                                <button class="post-option-item delete-btn" data-post-id="${post.id}" style="color: #ef4444;">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
                 
                 <div class="post-content">${this.escapeHtml(post.content)}</div>
@@ -204,8 +339,7 @@ const Feed = {
         document.querySelectorAll('.comment-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const postId = btn.dataset.postId;
-                // TODO: Show comments modal or section
-                console.log('Show comments for post:', postId);
+                this.showCommentsModal(postId);
             });
         });
         
@@ -214,6 +348,84 @@ const Feed = {
             btn.addEventListener('click', (e) => {
                 const postId = btn.dataset.postId;
                 this.sharePost(postId);
+            });
+        });
+        
+        // Post options menu toggle
+        document.querySelectorAll('.post-options-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const menu = btn.nextElementSibling;
+                if (menu) {
+                    const isHidden = menu.style.display === 'none';
+                    // Close all other menus
+                    document.querySelectorAll('.post-options-menu').forEach(m => m.style.display = 'none');
+                    // Toggle current menu
+                    menu.style.display = isHidden ? 'block' : 'none';
+                }
+            });
+        });
+        
+        // Delete post
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                if (confirm('Are you sure you want to delete this post?')) {
+                    await this.deletePost(postId);
+                }
+            });
+        });
+        
+        // Save post
+        document.querySelectorAll('.save-post-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                await this.savePost(postId);
+            });
+        });
+        
+        // Pin post
+        document.querySelectorAll('.pin-post-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                await this.pinPost(postId);
+            });
+        });
+        
+        // Edit post
+        document.querySelectorAll('.edit-post-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                Auth.showMessage('Edit post feature coming soon!', 'info');
+            });
+        });
+        
+        // Edit audience
+        document.querySelectorAll('.audience-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                Auth.showMessage('Edit audience feature coming soon!', 'info');
+            });
+        });
+        
+        // Archive post
+        document.querySelectorAll('.archive-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postId;
+                await this.archivePost(postId);
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.post-options-menu').forEach(menu => {
+                menu.style.display = 'none';
             });
         });
     },
@@ -261,21 +473,161 @@ const Feed = {
     },
     
     /**
-     * Setup infinite scroll
+     * Show comments modal
      */
-    setupInfiniteScroll() {
-        let loading = false;
+    async showCommentsModal(postId) {
+        const modal = document.getElementById('commentsModal');
+        if (!modal) return;
         
-        window.addEventListener('scroll', async () => {
-            if (loading) return;
+        // Store current post ID
+        this.currentCommentPostId = postId;
+        
+        // Show modal
+        modal.style.display = 'flex';
+        
+        // Load comments
+        await this.loadComments(postId);
+    },
+    
+    /**
+     * Close comments modal
+     */
+    closeCommentsModal() {
+        const modal = document.getElementById('commentsModal');
+        if (modal) {
+            modal.style.display = 'none';
+            // Clear form
+            const form = document.getElementById('addCommentForm');
+            if (form) form.reset();
+        }
+        this.currentCommentPostId = null;
+    },
+    
+    /**
+     * Load comments for a post
+     */
+    async loadComments(postId) {
+        try {
+            const container = document.getElementById('commentsContainer');
+            if (!container) return;
             
-            const scrollPosition = window.innerHeight + window.scrollY;
-            const threshold = document.documentElement.scrollHeight - 500;
+            // Show loading
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
             
-            if (scrollPosition >= threshold) {
-                loading = true;
+            // Get comments
+            const data = await API.get(CONFIG.ENDPOINTS.POST_COMMENTS.replace(':postId', postId));
+            
+            // Check if comments array exists and has content
+            if (!data || !data.comments || data.comments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: var(--spacing-6);">
+                        <p>💭 No comments yet. Be the first to comment!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render comments
+            container.innerHTML = data.comments.map(comment => this.renderComment(comment)).join('');
+            
+        } catch (error) {
+            console.error('Load comments error:', error);
+            const container = document.getElementById('commentsContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: var(--spacing-6);">
+                        <p>⚠️ Failed to load comments</p>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-tertiary);">${error.message}</p>
+                    </div>
+                `;
+            }
+            Auth.showMessage('Failed to load comments', 'error');
+        }
+    },
+    
+    /**
+     * Render single comment
+     */
+    renderComment(comment) {
+        const timeAgo = this.getTimeAgo(comment.created_at);
+        
+        return `
+            <div class="comment">
+                <img src="${comment.user_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(comment.user_name)}" 
+                     alt="${comment.user_name}" 
+                     class="comment-avatar">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <strong>${comment.user_name}</strong>
+                        <span class="comment-time">${timeAgo}</span>
+                    </div>
+                    <p class="comment-text">${this.escapeHtml(comment.content)}</p>
+                </div>
+            </div>
+        `;
+    },
+    
+    /**
+     * Submit a new comment
+     */
+    async submitComment() {
+        try {
+            const input = document.getElementById('commentContent');
+            const content = input.value.trim();
+            
+            if (!content) {
+                Auth.showMessage('Please enter a comment', 'error');
+                return;
+            }
+            
+            if (!this.currentCommentPostId) {
+                Auth.showMessage('No post selected', 'error');
+                return;
+            }
+            
+            // Submit comment
+            const data = await API.post(CONFIG.ENDPOINTS.COMMENTS, {
+                post_id: this.currentCommentPostId,
+                content: content
+            });
+            
+            // Clear input
+            input.value = '';
+            
+            // Reload comments
+            await this.loadComments(this.currentCommentPostId);
+            
+            Auth.showMessage('Comment posted!', 'success');
+            
+        } catch (error) {
+            console.error('Submit comment error:', error);
+            Auth.showMessage(error.message || 'Failed to post comment', 'error');
+        }
+    },
+    
+    
+    /**
+     * Setup load more button
+     */
+    setupLoadMoreButton() {
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        
+        if (!loadMoreBtn) return;
+        
+        loadMoreBtn.addEventListener('click', async () => {
+            const originalText = loadMoreBtn.textContent;
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.textContent = 'Loading...';
+            
+            try {
                 await this.loadFeed(this.posts.length);
-                loading = false;
+            } finally {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.textContent = originalText;
             }
         });
     },
@@ -284,7 +636,7 @@ const Feed = {
      * Show loading indicator
      */
     showLoading() {
-        const feedContainer = document.getElementById('feedContainer');
+        const feedContainer = document.getElementById('postsContainer');
         if (feedContainer) {
             feedContainer.innerHTML = `
                 <div class="loading">
@@ -300,6 +652,73 @@ const Feed = {
     hideLoading() {
         const loadingEl = document.querySelector('.loading');
         if (loadingEl) loadingEl.remove();
+        
+        // Hide loading state div
+        const loadingState = document.getElementById('loadingState');
+        if (loadingState) loadingState.style.display = 'none';
+    },
+    
+    /**
+     * Delete a post
+     */
+    async deletePost(postId) {
+        try {
+            // Call delete endpoint
+            await API.delete(CONFIG.ENDPOINTS.POSTS + `/${postId}`);
+            
+            // Remove from array
+            this.posts = this.posts.filter(p => p.id != postId);
+            
+            // Re-render
+            this.renderPosts();
+            
+            Auth.showMessage('Post deleted successfully!', 'success');
+        } catch (error) {
+            console.error('Delete post error:', error);
+            Auth.showMessage(error.message || 'Failed to delete post', 'error');
+        }
+    },
+    
+    /**
+     * Save a post (for later)
+     */
+    async savePost(postId) {
+        try {
+            // For now, just show a message
+            // TODO: Implement save to collection when backend supports it
+            Auth.showMessage('Post saved! (Feature coming soon)', 'success');
+        } catch (error) {
+            console.error('Save post error:', error);
+            Auth.showMessage('Failed to save post', 'error');
+        }
+    },
+    
+    /**
+     * Pin post to profile
+     */
+    async pinPost(postId) {
+        try {
+            // For now, just show a message
+            // TODO: Implement pin when backend supports it
+            Auth.showMessage('Post pinned! (Feature coming soon)', 'success');
+        } catch (error) {
+            console.error('Pin post error:', error);
+            Auth.showMessage('Failed to pin post', 'error');
+        }
+    },
+    
+    /**
+     * Archive a post
+     */
+    async archivePost(postId) {
+        try {
+            // For now, just show a message
+            // TODO: Implement archive when backend supports it
+            Auth.showMessage('Post archived! (Feature coming soon)', 'success');
+        } catch (error) {
+            console.error('Archive post error:', error);
+            Auth.showMessage('Failed to archive post', 'error');
+        }
     },
     
     /**
@@ -342,3 +761,5 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = Feed;
 }
+
+

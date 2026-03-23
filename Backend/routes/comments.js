@@ -9,7 +9,8 @@ const { body, validationResult } = require('express-validator');
 router.get('/post/:postId', async (req, res) => {
     try {
         const { postId } = req.params;
-        const { limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
 
         const comments = await query(`
             SELECT 
@@ -21,8 +22,8 @@ router.get('/post/:postId', async (req, res) => {
             JOIN users u ON c.user_id = u.id
             WHERE c.post_id = ?
             ORDER BY c.created_at DESC
-            LIMIT ? OFFSET ?
-        `, [postId, parseInt(limit), parseInt(offset)]);
+            LIMIT ${limit} OFFSET ${offset}
+        `, [postId]);
 
         res.json({ comments });
     } catch (error) {

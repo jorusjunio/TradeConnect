@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/feed.css">
     <title>Feed - TradeConnect</title>
     
     <!-- Load CSS in this ORDER -->
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/pages.css">
-    <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -156,10 +151,38 @@
         </div>
     </div>
 
-    <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/utils.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/feed.js"></script>
+    <!-- Comments Modal -->
+    <div id="commentsModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Comments</h3>
+                <button class="modal-close" id="closeCommentsBtn">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="commentsContainer">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <form id="addCommentForm" class="comment-form">
+                    <input 
+                        type="text" 
+                        id="commentContent" 
+                        placeholder="Add a comment..." 
+                        required
+                    >
+                    <button type="submit" class="btn-primary btn-small">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/feed.js"></script>
 </body>
 </html>

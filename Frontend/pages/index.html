@@ -1,156 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeConnect - Social Trading Platform</title>
-    
-    <!-- CSS Files - Load in this specific order -->
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/pages.css">
-    <link rel="stylesheet" href="../css/responsive.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/home.css">
+<title>TradeConnect — Social Trading Platform</title>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <h1>📈 TradeConnect</h1>
-            </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="explore.html">Explore</a>
-                <a href="login.html" class="btn-secondary">Login</a>
-                <a href="register.html" class="btn-primary">Sign Up</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Connect with Traders Worldwide</h1>
-                <p class="hero-subtitle">
-                    Share strategies, learn from experts, and grow your trading network
-                </p>
-                <div class="hero-cta">
-                    <a href="register.html" class="btn-primary btn-large">Get Started Free</a>
-                    <a href="#features" class="btn-secondary btn-large">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </section>
+<div id="spb"></div>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <h2 class="section-title">Why TradeConnect?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Share Strategies</h3>
-                    <p>Post your trading strategies, charts, and market analysis with the community</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3>Build Network</h3>
-                    <p>Follow expert traders and stay updated with their latest insights</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Multi-Market</h3>
-                    <p>Trade Forex, Crypto, Stocks, and more - all in one platform</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <h3>Trade Alerts</h3>
-                    <p>Set up alerts and never miss important trading opportunities</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <h3>Learn & Grow</h3>
-                    <p>Access insights from traders of all experience levels</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Track Progress</h3>
-                    <p>Monitor your posts, followers, and engagement in one dashboard</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Underwater glow -->
+<div id="underwaterGlow">
+  <div class="caustic-line" style="left:22%;--dur:3.8s;--delay:.0s;--r0:-4deg;--r1:3deg;--a0:.7;--a1:.3"></div>
+  <div class="caustic-line" style="left:31%;--dur:4.4s;--delay:.6s;--r0:2deg;--r1:-3deg;--a0:.5;--a1:.9"></div>
+  <div class="caustic-line" style="left:42%;--dur:3.2s;--delay:1.1s;--r0:-2deg;--r1:4deg;--a0:.8;--a1:.4"></div>
+  <div class="caustic-line" style="left:50%;--dur:5.0s;--delay:.3s;--r0:0deg;--r1:-2deg;--a0:.9;--a1:.5"></div>
+  <div class="caustic-line" style="left:57%;--dur:3.6s;--delay:1.8s;--r0:3deg;--r1:-4deg;--a0:.4;--a1:.8"></div>
+  <div class="caustic-line" style="left:67%;--dur:4.2s;--delay:.9s;--r0:-3deg;--r1:2deg;--a0:.6;--a1:.3"></div>
+  <div class="caustic-line" style="left:76%;--dur:3.9s;--delay:2.2s;--r0:2deg;--r1:-3deg;--a0:.5;--a1:.9"></div>
+</div>
+</div>
 
-    <!-- Markets Section -->
-    <section class="markets">
-        <div class="container">
-            <h2 class="section-title">Markets We Cover</h2>
-            <div class="markets-grid">
-                <div class="market-card">
-                    <h3>💱 Forex</h3>
-                    <p>Currency pairs and FX strategies</p>
-                </div>
-                <div class="market-card">
-                    <h3>₿ Crypto</h3>
-                    <p>Bitcoin, Ethereum, Altcoins</p>
-                </div>
-                <div class="market-card">
-                    <h3>📈 Stocks</h3>
-                    <p>Equities and share trading</p>
-                </div>
-                <div class="market-card">
-                    <h3>🛢️ Commodities</h3>
-                    <p>Gold, Oil, and more</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <div class="nav-logo-wrap">
+      <a href="#top" class="nav-logo" aria-label="TradeConnect">
+        <img src="../assets/logo.svg" alt="TradeConnect" width="36" height="36">
+      </a>
+        <span class="nav-logo-label">TradeConnect</span>
+      </div>
+    </div>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>Ready to Start Trading Smarter?</h2>
-            <p>Join thousands of traders already on TradeConnect</p>
-            <a href="register.html" class="btn-primary btn-large">Create Free Account</a>
-        </div>
-    </section>
+    <div class="nav-center">
+      <a href="#top" class="active">Home</a>
+      <a href="#features">How It Works</a>
+      <a href="explore.html">Explore</a>
+      <a href="#mktSection">Markets</a>
+    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>📈 TradeConnect</h3>
-                    <p>Social platform for traders worldwide</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Platform</h4>
-                        <a href="feed.html">Feed</a>
-                        <a href="explore.html">Explore</a>
-                        <a href="#">Markets</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Blog</a>
-                        <a href="#">Contact</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy</a>
-                        <a href="#">Terms</a>
-                        <a href="#">Disclaimer</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 TradeConnect. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <div class="nav-right">
+      <a href="login.html" class="nav-btn-ghost">Login / Register</a>
+      <a href="register.html" class="nav-btn-cta">
+        Get Started
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- FLOATING LOGIN -->
+<a href="login.html" class="float-login" id="floatLogin">
+  <div class="fl-avatar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </div>
+  <div class="fl-text">
+    <span class="fl-label">Already a member?</span>
+    <span class="fl-action">Log in →</span>
+  </div>
+</a>
+
+<!-- ═══ HERO ═══════════════════════════════ -->
+<section class="hero" id="top">
+  <canvas id="heroCanvas"></canvas>
+  <!-- Hero bottom accent line -->
+  <div class="hero-inner">
+    <div class="hero-badge" id="heroBadge">
+      <span class="live-dot"></span>Now live — 40,000+ traders worldwide
+    </div>
+    <h1 class="hero-title">
+      <span class="word">Connect</span>&nbsp;<span class="word">with</span><br>
+      <span class="word">Traders</span>&nbsp;<span class="word">Worldwide</span>
+    </h1>
+    <p class="hero-sub" id="heroSub">Share strategies, discover insights, and grow your trading network — all in one place.</p>
+    <div class="hero-cta" id="heroCta">
+      <a href="register.html" class="btn-primary  btn-large">Get Started Free</a>
+      <a href="#features"     class="btn-secondary btn-large">How It Works</a>
+    </div>
+    <div class="hero-stats" id="heroStats">
+      <div class="h-stat">
+        <span class="lbl">Active Traders</span>
+        <span class="val count-up" data-target="40238">0</span>
+        <span class="chg" style="color:#32D583">+12% this month</span>
+      </div>
+      <div class="h-stat">
+        <span class="lbl">Total Posts</span>
+        <span class="val count-up" data-target="218400">0</span>
+        <span class="chg" style="color:#32D583">+8.4K today</span>
+      </div>
+      <div class="h-stat">
+        <span class="lbl">Markets</span>
+        <span class="val">4+</span>
+        <span class="chg" style="color:rgba(255,255,255,.28)">Forex · Crypto · Stocks</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ STATS ══════════════════════════════ -->
+<section class="section stats-section" id="statsSection" data-section="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="sg-item anim-scale" data-anim>
+        <span class="sg-val count-up" data-target="40000">0</span>
+        <span class="sg-lbl">Traders</span>
+        <div class="sg-bar"></div>
+      </div>
+      <div class="sg-item anim-scale d2" data-anim>
+        <span class="sg-val count-up" data-target="218000">0</span>
+        <span class="sg-lbl">Posts Shared</span>
+        <div class="sg-bar"></div>
+      </div>
+      <div class="sg-item anim-scale d3" data-anim>
+        <span class="sg-val count-up" data-target="96">0</span>
+        <span class="sg-lbl" style="display:block">% Uptime</span>
+        <div class="sg-bar"></div>
+      </div>
+      <div class="sg-item anim-scale d4" data-anim>
+        <span class="sg-val">4</span>
+        <span class="sg-lbl">Markets</span>
+        <div class="sg-bar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ FEATURES ═══════════════════════════ -->
+<section class="section features-section" id="features">
+  <canvas id="featCanvas"></canvas>
+  <div class="container">
+    <div style="text-align:center;margin-bottom:8px">
+      <h2 class="section-title anim-blur" data-anim>Why TradeConnect?</h2>
+      <p class="section-subtitle anim-fade-up d2" data-anim style="margin-bottom:0">Five reasons thousands of traders chose us.</p>
+    </div>
+
+    <div class="feat-item anim-fade-left" data-anim>
+      <div class="feat-icon-box">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(180,160,255,.75)" stroke-width="1.3" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-num">01 / 05</span>
+        <h3 class="feat-title">Share Strategies</h3>
+        <p class="feat-desc">Post your trading ideas, charts, and market analysis with a community that gets it. Real-time, zero noise.</p>
+      </div>
+    </div>
+
+    <div class="feat-item rev anim-fade-right" data-anim>
+      <div class="feat-icon-box" style="border-color:rgba(50,213,131,.1)">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(50,213,131,.7)" stroke-width="1.3" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-num">02 / 05</span>
+        <h3 class="feat-title">Build Your Network</h3>
+        <p class="feat-desc">Follow expert traders, build connections, and stay ahead with curated insights from people you trust.</p>
+      </div>
+    </div>
+
+    <div class="feat-item anim-fade-left" data-anim>
+      <div class="feat-icon-box" style="border-color:rgba(249,196,73,.1)">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(249,196,73,.7)" stroke-width="1.3" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-num">03 / 05</span>
+        <h3 class="feat-title">Multi-Market Coverage</h3>
+        <p class="feat-desc">Forex, Crypto, Stocks, Commodities — all in one platform. Stop switching apps. Start switching markets.</p>
+      </div>
+    </div>
+
+    <div class="feat-item rev anim-fade-right" data-anim>
+      <div class="feat-icon-box" style="border-color:rgba(249,112,102,.1)">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(249,112,102,.7)" stroke-width="1.3" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-num">04 / 05</span>
+        <h3 class="feat-title">Smart Trade Alerts</h3>
+        <p class="feat-desc">Customized alerts that notify you exactly when the market does something worth acting on.</p>
+      </div>
+    </div>
+
+    <div class="feat-item anim-fade-left" data-anim>
+      <div class="feat-icon-box" style="border-color:rgba(123,97,255,.15)">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(123,97,255,.85)" stroke-width="1.3" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-num">05 / 05</span>
+        <h3 class="feat-title">Track Your Progress</h3>
+        <p class="feat-desc">Posts, followers, engagement — all in one clean dashboard built for traders who take growth seriously.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ MARKETS ═════════════════════════════ -->
+<section class="section markets-section" id="mktSection">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-title-wrap anim-scale" data-anim><h2 class="section-title">Markets We Cover</h2></div>
+      <p class="section-subtitle anim-fade-up d2" data-anim style="margin-bottom:0">Discuss and analyse the world's most traded asset classes.</p>
+    </div>
+    <div class="markets-grid-4">
+      <div class="m-card">
+        <div class="m-glow" style="background:rgba(123,97,255,.3);top:-20px;left:-20px"></div>
+        <div class="m-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4a0ff" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h3>Forex</h3><p>Currency pairs and FX strategies — major, minor, and exotic.</p>
+      </div>
+      <div class="m-card">
+        <div class="m-glow" style="background:rgba(249,196,73,.25);top:-20px;right:-20px"></div>
+        <div class="m-icon" style="background:rgba(249,196,73,.08);border-color:rgba(249,196,73,.18)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F9C449" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Crypto</h3><p>Bitcoin, Ethereum, Altcoins — everything digital asset.</p>
+      </div>
+      <div class="m-card">
+        <div class="m-glow" style="background:rgba(50,213,131,.22);bottom:-20px;left:-20px"></div>
+        <div class="m-icon" style="background:rgba(50,213,131,.08);border-color:rgba(50,213,131,.18)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#32D583" stroke-width="1.7" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <h3>Stocks</h3><p>Equities, ETFs, and share trading ideas from global markets.</p>
+      </div>
+      <div class="m-card">
+        <div class="m-glow" style="background:rgba(249,112,102,.2);bottom:-20px;right:-20px"></div>
+        <div class="m-icon" style="background:rgba(249,112,102,.08);border-color:rgba(249,112,102,.18)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F97066" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3>Commodities</h3><p>Gold, Oil, Silver, and natural resources — made social.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ CTA ══════════════════════════════════ -->
+<section class="section cta-section" id="ctaSection">
+  <div class="cta-inner">
+    <span class="cta-label anim-fade-down" data-anim>Ready to get started?</span>
+    <h2 class="cta-title anim-blur d2" data-anim>Trade Smarter.<br>Together.</h2>
+    <p class="cta-sub anim-fade-up d3" data-anim>Join thousands of traders — it's free.</p>
+    <div class="cta-btn-wrap anim-scale d4" data-anim>
+      <a href="register.html" class="btn-primary btn-large">Create Free Account</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer class="footer" style="position:relative">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="fb-brand">TradeConnect</div>
+        <p class="fb-desc">A social platform for traders worldwide — built to share, learn, and grow.</p>
+      </div>
+      <div><div class="fc-head">Platform</div><a href="feed.html" class="fc-link">Feed</a><a href="explore.html" class="fc-link">Explore</a><a href="#" class="fc-link">Markets</a></div>
+      <div><div class="fc-head">Company</div><a href="#" class="fc-link">About</a><a href="#" class="fc-link">Blog</a><a href="#" class="fc-link">Contact</a></div>
+      <div><div class="fc-head">Legal</div><a href="#" class="fc-link">Privacy</a><a href="#" class="fc-link">Terms</a><a href="#" class="fc-link">Disclaimer</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 TradeConnect. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="../js/home.js"></script>
 </body>
 </html>

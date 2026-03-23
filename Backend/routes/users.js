@@ -8,7 +8,9 @@ const { body, validationResult } = require('express-validator');
 // Get all users / search users
 router.get('/', async (req, res) => {
     try {
-        const { search, trading_style, experience_level, limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
+        const { search, trading_style, experience_level } = req.query;
 
         let sql = 'SELECT id, name, email, avatar, bio, trading_style, experience_level, portfolio_link, created_at FROM users WHERE 1=1';
         const params = [];
@@ -28,16 +30,15 @@ router.get('/', async (req, res) => {
             params.push(experience_level);
         }
 
-        sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-        params.push(parseInt(limit), parseInt(offset));
+        sql += ` ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
 
         const users = await query(sql, params);
 
         res.json({
             users,
             pagination: {
-                limit: parseInt(limit),
-                offset: parseInt(offset)
+                limit,
+                offset
             }
         });
     } catch (error) {
@@ -146,7 +147,8 @@ router.put('/me/profile', authenticate, async (req, res) => {
 router.get('/:id/posts', async (req, res) => {
     try {
         const { id } = req.params;
-        const { limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
 
         const posts = await query(`
             SELECT 
@@ -159,8 +161,8 @@ router.get('/:id/posts', async (req, res) => {
             JOIN users u ON p.user_id = u.id
             WHERE p.user_id = ?
             ORDER BY p.created_at DESC
-            LIMIT ? OFFSET ?
-        `, [id, parseInt(limit), parseInt(offset)]);
+            LIMIT ${limit} OFFSET ${offset}
+        `, [id]);
 
         res.json({ posts });
     } catch (error) {
@@ -173,7 +175,8 @@ router.get('/:id/posts', async (req, res) => {
 router.get('/:id/followers', async (req, res) => {
     try {
         const { id } = req.params;
-        const { limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
 
         const followers = await query(`
             SELECT 
@@ -183,8 +186,8 @@ router.get('/:id/followers', async (req, res) => {
             JOIN users u ON f.follower_id = u.id
             WHERE f.following_id = ?
             ORDER BY f.created_at DESC
-            LIMIT ? OFFSET ?
-        `, [id, parseInt(limit), parseInt(offset)]);
+            LIMIT ${limit} OFFSET ${offset}
+        `, [id]);
 
         res.json({ followers });
     } catch (error) {
@@ -197,7 +200,8 @@ router.get('/:id/followers', async (req, res) => {
 router.get('/:id/following', async (req, res) => {
     try {
         const { id } = req.params;
-        const { limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
 
         const following = await query(`
             SELECT 
@@ -207,8 +211,8 @@ router.get('/:id/following', async (req, res) => {
             JOIN users u ON f.following_id = u.id
             WHERE f.follower_id = ?
             ORDER BY f.created_at DESC
-            LIMIT ? OFFSET ?
-        `, [id, parseInt(limit), parseInt(offset)]);
+            LIMIT ${limit} OFFSET ${offset}
+        `, [id]);
 
         res.json({ following });
     } catch (error) {

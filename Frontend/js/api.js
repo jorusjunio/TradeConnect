@@ -99,7 +99,7 @@ const API = {
         // Redirect to login
         if (!window.location.pathname.includes('login')) {
             alert('Session expired. Please login again.');
-            window.location.href = '/pages/login.html';
+            window.location.href = './login.html';
         }
     },
     
@@ -139,3 +139,4 @@ const API = {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = API;
 }
+

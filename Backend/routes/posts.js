@@ -8,7 +8,9 @@ const { body, validationResult } = require('express-validator');
 // Get all posts (feed) - with optional authentication for personalized feed
 router.get('/', optionalAuth, async (req, res) => {
     try {
-        const { limit = 50, offset = 0, market_tag, user_id } = req.query;
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
+        const { market_tag, user_id } = req.query;
 
         let sql = `
             SELECT 
@@ -47,16 +49,15 @@ router.get('/', optionalAuth, async (req, res) => {
             params.push(user_id);
         }
 
-        sql += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
-        params.push(parseInt(limit), parseInt(offset));
+        sql += ` ORDER BY p.created_at DESC LIMIT ${limit} OFFSET ${offset}`;
 
         const posts = await query(sql, params);
 
         res.json({
             posts,
             pagination: {
-                limit: parseInt(limit),
-                offset: parseInt(offset),
+                limit,
+                offset,
                 total: posts.length
             }
         });
@@ -69,9 +70,10 @@ router.get('/', optionalAuth, async (req, res) => {
 // Get feed from followed users
 router.get('/feed', authenticate, async (req, res) => {
     try {
-        const { limit = 50, offset = 0 } = req.query;
+        const limit = parseInt(req.query.limit) || 20;
+        const offset = parseInt(req.query.offset) || 0;
 
-        const posts = await query(`
+        const sql = `
             SELECT 
                 p.*,
                 u.name as user_name,
@@ -87,14 +89,16 @@ router.get('/feed', authenticate, async (req, res) => {
             )
             OR p.user_id = ?
             ORDER BY p.created_at DESC
-            LIMIT ? OFFSET ?
-        `, [req.user.id, req.user.id, req.user.id, parseInt(limit), parseInt(offset)]);
+            LIMIT ${limit} OFFSET ${offset}
+        `;
+
+        const posts = await query(sql, [req.user.id, req.user.id, req.user.id]);
 
         res.json({
             posts,
             pagination: {
-                limit: parseInt(limit),
-                offset: parseInt(offset)
+                limit,
+                offset
             }
         });
     } catch (error) {

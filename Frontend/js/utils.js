@@ -254,6 +254,109 @@ const Utils = {
         );
     },
     
+
+    /**
+     * Count-up animation for a number element
+     * @param {HTMLElement} el - Element with data-target attribute
+     */
+    countUp(el) {
+        const target = parseInt(el.dataset.target, 10);
+        const s = performance.now();
+        const ease = t => 1 - Math.pow(1 - t, 3);
+        el.removeAttribute('data-target');
+        (function step(now) {
+            const p = Math.min((now - s) / 1700, 1);
+            const v = Math.round(ease(p) * target);
+            el.textContent = v >= 1000 ? v.toLocaleString() : v;
+            if (p < 1) requestAnimationFrame(step);
+        })(s);
+    },
+
+    /**
+     * Init scroll animation observer (intro + outro) for pages using [data-anim]
+     */
+    initScrollAnimations() {
+        const animEls = Array.from(document.querySelectorAll('[data-anim]'));
+        const seenEls = new Set();
+
+        /* Mark elements hidden via JS — they stay visible if JS fails */
+        animEls.forEach(el => el.classList.add('anim-ready'));
+
+        const animObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                const el    = e.target;
+                const ratio = e.intersectionRatio;
+
+                if (e.isIntersecting && ratio >= 0.18) {
+                    el.classList.remove('anim-out');
+                    el.classList.add('anim-in');
+                    seenEls.add(el);
+
+                    if (el.classList.contains('sg-item')) {
+                        el.classList.add('in');
+                        setTimeout(() => {
+                            el.classList.add('ring-pulse');
+                            setTimeout(() => el.classList.remove('ring-pulse'), 800);
+                        }, 200);
+                    }
+                    if (el.classList.contains('m-card')) {
+                        setTimeout(() => {
+                            el.classList.add('shimmer');
+                            setTimeout(() => el.classList.remove('shimmer'), 800);
+                        }, 120);
+                    }
+                    if (el.closest && el.closest('.cta-section')) {
+                        const sec = document.querySelector('.cta-section');
+                        if (sec) {
+                            setTimeout(() => {
+                                sec.classList.add('glow-once');
+                                setTimeout(() => sec.classList.remove('glow-once'), 1400);
+                            }, 350);
+                        }
+                    }
+                } else if (!e.isIntersecting && seenEls.has(el)) {
+                    el.classList.remove('anim-in');
+                    el.classList.add('anim-out');
+                    el.addEventListener('transitionend', function snap() {
+                        if (el.classList.contains('anim-out')) {
+                        el.classList.remove('anim-out');
+                        el.classList.add('anim-ready');
+                    }
+                        el.removeEventListener('transitionend', snap);
+                    });
+                }
+            });
+        }, { threshold: [0, 0.18, 1], rootMargin: '0px 0px -30px 0px' });
+
+        animEls.forEach(el => animObs.observe(el));
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            if (!el.dataset.anim) {
+                el.classList.add('anim-fade-up');
+                el.setAttribute('data-anim', '');
+                animObs.observe(el);
+            }
+        });
+
+        document.querySelectorAll('.m-card').forEach((el, i) => {
+            if (!el.dataset.anim) {
+                el.setAttribute('data-anim', '');
+                el.style.transitionDelay = (i * 0.09) + 's';
+                animObs.observe(el);
+            }
+        });
+
+        const countObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting && e.target.dataset.target) {
+                    Utils.countUp(e.target);
+                    countObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.count-up').forEach(el => countObs.observe(el));
+    },
+
     /**
      * Generate random ID
      * @returns {string} Random ID

@@ -1,6 +1,14 @@
 // Database Configuration for TiDB/MySQL
 const mysql = require('mysql2/promise');
 
+// Debug: Check if env variables are loaded
+console.log('🔍 DB Config Check:');
+console.log('HOST:', process.env.DB_HOST);
+console.log('PORT:', process.env.DB_PORT);
+console.log('USER:', process.env.DB_USER);
+console.log('DATABASE:', process.env.DB_NAME);
+console.log('PASSWORD:', process.env.DB_PASSWORD ? '***hidden***' : 'MISSING!');
+
 // Create connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -25,7 +33,7 @@ const testConnection = async () => {
         console.log('✅ Database connected successfully');
         connection.release();
     } catch (error) {
-        console.error('❌ Database connection failed:', error.message);
+        console.error('❌ Database connection failed:', error);
         // process.exit(1);
     }
 };

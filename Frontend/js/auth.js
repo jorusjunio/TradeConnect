@@ -18,8 +18,34 @@ const Auth = {
             this.initRegisterForm();
         }
         
+        // Setup navbar buttons (profile link and logout)
+        this.setupNavbar();
+        
         // Check authentication on protected pages
         this.checkAuthOnProtectedPages();
+    },
+    
+    /**
+     * Setup navbar event listeners
+     */
+    setupNavbar() {
+        // Profile link
+        const profileLink = document.getElementById('profileLink');
+        if (profileLink) {
+            profileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = './profile.html';
+            });
+        }
+        
+        // Logout button
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.logout();
+            });
+        }
     },
     
     /**
@@ -57,7 +83,7 @@ const Auth = {
                 
                 // Redirect to feed
                 setTimeout(() => {
-                    window.location.href = '/pages/feed.html';
+                    window.location.href = './feed.html';
                 }, 1000);
                 
             } catch (error) {
@@ -120,7 +146,7 @@ const Auth = {
                 
                 // Redirect to feed
                 setTimeout(() => {
-                    window.location.href = '/pages/feed.html';
+                    window.location.href = './feed.html';
                 }, 1000);
                 
             } catch (error) {
@@ -145,7 +171,7 @@ const Auth = {
             API.saveAuth(data.token, data.user);
             
             // Redirect to feed
-            window.location.href = '/pages/feed.html';
+            window.location.href = './feed.html';
             
         } catch (error) {
             console.error('Google login error:', error);
@@ -161,7 +187,7 @@ const Auth = {
         API.clearAuth();
         
         // Redirect to login
-        window.location.href = '/pages/login.html';
+        window.location.href = './login.html';
     },
     
     /**
@@ -176,7 +202,7 @@ const Auth = {
         
         if (isProtected && !API.isAuthenticated()) {
             // Redirect to login
-            window.location.href = '/pages/login.html';
+            window.location.href = './login.html';
         }
     },
     
@@ -266,3 +292,4 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+

@@ -3,7 +3,7 @@
 
 const CONFIG = {
     // API Base URL - change this when deploying
-    API_URL: 'http://localhost:5000/api',
+    API_URL: 'https://tradeconnect-backend-84vf.onrender.com/api',
     
     // Local Storage Keys
     STORAGE_KEYS: {

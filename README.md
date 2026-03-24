@@ -1,6 +1,6 @@
-# TradeConnect - Social Trading Platform
+# TradeConnect — Social Trading Platform
 
-A full-stack social platform designed for traders to connect, share trades, strategies, and market insights.
+A full-stack social platform for traders to connect, share trades, strategies, and market insights.
 
 ## 📋 Project Overview
 
@@ -23,39 +23,52 @@ TradeConnect is a niche social network tailored for traders where users can:
 ## 📁 Project Structure
 
 ```
-tradeconnect/
-├── backend/
+TRADECONNECT/
+├── Backend/
 │   ├── config/
 │   │   └── database.js
 │   ├── middleware/
 │   │   └── auth.js
 │   ├── routes/
+│   │   ├── alerts.js
 │   │   ├── auth.js
-│   │   ├── posts.js
-│   │   ├── users.js
 │   │   ├── comments.js
 │   │   ├── follows.js
-│   │   └── alerts.js
-│   ├── server.js
+│   │   ├── posts.js
+│   │   └── users.js
+│   ├── .env
 │   ├── package.json
-│   └── .env
-├── frontend/
+│   ├── package-lock.json
+│   ├── schema.sql
+│   └── server.js
+├── Frontend/
+│   ├── assets/
+│   │   ├── logo.jpg
+│   │   └── logo.svg
 │   ├── css/
-│   │   └── style.css
+│   │   ├── CSS-GUIDE.md
+│   │   ├── explore.css
+│   │   ├── feed.css
+│   │   ├── home.css
+│   │   ├── login.css
+│   │   ├── profile.css
+│   │   └── register.css
 │   ├── js/
-│   │   ├── app.js
+│   │   ├── api.js
 │   │   ├── auth.js
+│   │   ├── config.js
+│   │   ├── explore.js
 │   │   ├── feed.js
-│   │   └── profile.js
-│   ├── pages/
-│   │   ├── index.html
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   ├── feed.html
-│   │   ├── profile.html
-│   │   └── explore.html
-│   └── assets/
-│       └── images/
+│   │   ├── home.js
+│   │   ├── profile.js
+│   │   └── utils.js
+│   └── pages/
+│       ├── explore.html
+│       ├── feed.html
+│       ├── index.html
+│       ├── login.html
+│       ├── profile.html
+│       └── register.html
 └── README.md
 ```
 
@@ -70,19 +83,18 @@ tradeconnect/
 
 ### Step 1: Setup TiDB Database
 
-1. Sign up for TiDB Cloud: https://tidbcloud.com/
+1. Sign up at https://tidbcloud.com/
 2. Create a new cluster (free tier)
 3. Get your connection credentials
-4. Run the `schema.sql` file to create tables
+4. Run the schema file to create tables:
 
 ```bash
-# Connect to your TiDB cluster and run:
-mysql -h <your-host> -P 4000 -u <username> -p < schema.sql
+mysql -h <your-host> -P 4000 -u <username> -p < Backend/schema.sql
 ```
 
 ### Step 2: Setup Google OAuth
 
-1. Go to Google Cloud Console: https://console.cloud.google.com/
+1. Go to https://console.cloud.google.com/
 2. Create a new project or select existing
 3. Enable Google+ API
 4. Create OAuth 2.0 credentials
@@ -91,22 +103,18 @@ mysql -h <your-host> -P 4000 -u <username> -p < schema.sql
 
 ### Step 3: Backend Setup
 
-1. Navigate to backend directory:
 ```bash
-cd backend
-```
-
-2. Install dependencies:
-```bash
+cd Backend
 npm install
 ```
 
-3. Create `.env` file (copy from env-template.txt):
+Create a `.env` file inside `Backend/`:
+
 ```env
 PORT=5000
 NODE_ENV=development
 
-# Database Configuration
+# Database
 DB_HOST=your-tidb-host
 DB_PORT=4000
 DB_USER=your-username
@@ -114,7 +122,7 @@ DB_PASSWORD=your-password
 DB_NAME=tradeconnect
 DB_SSL=true
 
-# JWT Configuration
+# JWT
 JWT_SECRET=your-secret-key-change-this
 JWT_EXPIRE=7d
 
@@ -127,167 +135,153 @@ GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
 FRONTEND_URL=http://localhost:3000
 ```
 
-4. Start the server:
-```bash
-# Development mode with auto-restart
-npm run dev
+Start the server:
 
-# Production mode
-npm start
+```bash
+npm run dev    # Development (auto-restart)
+npm start      # Production
 ```
 
-Server will run on http://localhost:5000
+Server runs on http://localhost:5000
 
 ### Step 4: Frontend Setup
 
-1. Navigate to frontend directory:
 ```bash
-cd frontend
-```
+cd Frontend
 
-2. For local development, use a simple HTTP server:
-```bash
 # Using Python
 python -m http.server 3000
 
-# OR using Node.js http-server (install globally first)
+# OR using Node.js
 npm install -g http-server
 http-server -p 3000
 ```
 
-Frontend will be available at http://localhost:3000
+Frontend available at http://localhost:3000
 
 ## 📝 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/google` - Google OAuth login
-- `GET /api/auth/verify` - Verify JWT token
+- `POST /api/auth/register` — Register new user
+- `POST /api/auth/login` — Login user
+- `POST /api/auth/google` — Google OAuth login
+- `GET /api/auth/verify` — Verify JWT token
 
 ### Users
-- `GET /api/users` - Get all users / search
-- `GET /api/users/:id` - Get user profile
-- `GET /api/users/me/profile` - Get current user profile
-- `PUT /api/users/me/profile` - Update profile
-- `GET /api/users/:id/posts` - Get user's posts
-- `GET /api/users/:id/followers` - Get user's followers
-- `GET /api/users/:id/following` - Get users being followed
+- `GET /api/users` — Get all users / search
+- `GET /api/users/:id` — Get user profile
+- `GET /api/users/me/profile` — Get current user profile
+- `PUT /api/users/me/profile` — Update profile
+- `GET /api/users/:id/posts` — Get user's posts
+- `GET /api/users/:id/followers` — Get user's followers
+- `GET /api/users/:id/following` — Get users being followed
 
 ### Posts
-- `GET /api/posts` - Get all posts
-- `GET /api/posts/feed` - Get personalized feed (authenticated)
-- `GET /api/posts/:id` - Get single post
-- `POST /api/posts` - Create new post (authenticated)
-- `PUT /api/posts/:id` - Update post (authenticated)
-- `DELETE /api/posts/:id` - Delete post (authenticated)
-- `POST /api/posts/:id/like` - Like/unlike post (authenticated)
+- `GET /api/posts` — Get all posts
+- `GET /api/posts/feed` — Get personalized feed (auth required)
+- `GET /api/posts/:id` — Get single post
+- `POST /api/posts` — Create post (auth required)
+- `PUT /api/posts/:id` — Update post (auth required)
+- `DELETE /api/posts/:id` — Delete post (auth required)
+- `POST /api/posts/:id/like` — Like/unlike post (auth required)
 
 ### Comments
-- `GET /api/comments/post/:postId` - Get comments for post
-- `POST /api/comments` - Create comment (authenticated)
-- `PUT /api/comments/:id` - Update comment (authenticated)
-- `DELETE /api/comments/:id` - Delete comment (authenticated)
+- `GET /api/comments/post/:postId` — Get comments for post
+- `POST /api/comments` — Create comment (auth required)
+- `PUT /api/comments/:id` — Update comment (auth required)
+- `DELETE /api/comments/:id` — Delete comment (auth required)
 
 ### Follows
-- `POST /api/follows/:userId` - Follow user (authenticated)
-- `DELETE /api/follows/:userId` - Unfollow user (authenticated)
-- `GET /api/follows/check/:userId` - Check if following (authenticated)
+- `POST /api/follows/:userId` — Follow user (auth required)
+- `DELETE /api/follows/:userId` — Unfollow user (auth required)
+- `GET /api/follows/check/:userId` — Check if following (auth required)
 
-### Trade Alerts (Optional)
-- `GET /api/alerts` - Get all alerts
-- `GET /api/alerts/me` - Get user's alerts (authenticated)
-- `GET /api/alerts/:id` - Get single alert
-- `POST /api/alerts` - Create alert (authenticated)
-- `PUT /api/alerts/:id` - Update alert (authenticated)
-- `DELETE /api/alerts/:id` - Delete alert (authenticated)
+### Trade Alerts
+- `GET /api/alerts` — Get all alerts
+- `GET /api/alerts/me` — Get user's alerts (auth required)
+- `GET /api/alerts/:id` — Get single alert
+- `POST /api/alerts` — Create alert (auth required)
+- `PUT /api/alerts/:id` — Update alert (auth required)
+- `DELETE /api/alerts/:id` — Delete alert (auth required)
 
 ## 🔐 Authentication
 
-The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
+JWT-based authentication. Include token in request headers:
 
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
-## 📅 Development Timeline
-
-### Day 1: Foundation & Authentication
-- ✅ Setup project structure
-- ✅ Initialize database and create tables
-- ✅ Implement authentication (Register/Login)
-- ✅ Setup Google OAuth
-- ✅ Create JWT middleware
-- ✅ Build basic UI (landing, login, register)
-
-### Day 2: Core Features
-- ⬜ CRUD operations for posts
-- ⬜ Comment system
-- ⬜ Like/unlike functionality
-- ⬜ Follow/unfollow system
-- ⬜ Build feed/timeline page
-- ⬜ Create explore/search page
-- ⬜ Build profile page
-- ⬜ Create dashboard
-- ⬜ Deploy to Render
-
-### Day 3: Polish & Launch
-- ⬜ Bug fixes and testing
-- ⬜ UI polish and responsive design
-- ⬜ Optional: Trade alerts feature
-- ⬜ Domain setup (Namecheap)
-- ⬜ Final testing
-- ⬜ Go live! 🚀
-
 ## 🚢 Deployment to Render
 
-### Backend Deployment
+### Backend — Web Service
 
-1. Create a new Web Service on Render
-2. Connect your GitHub repository
-3. Configure build settings:
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-4. Add environment variables from your `.env` file
-5. Deploy!
+1. New Web Service → connect GitHub repo
+2. Root Directory: `Backend`
+3. Build Command: `npm install`
+4. Start Command: `npm start`
+5. Add all `.env` variables under Environment
+6. Deploy
 
-### Frontend Deployment
+### Frontend — Static Site
 
-1. Create a new Static Site on Render
-2. Connect your frontend directory
-3. Configure:
-   - Build Command: (leave empty for static HTML)
-   - Publish Directory: `frontend`
-4. Deploy!
+1. New Static Site → connect GitHub repo
+2. Root Directory: `Frontend`
+3. Build Command: *(leave empty)*
+4. Publish Directory: `Frontend`
+5. Deploy
 
 ## 🌐 Domain Setup (Namecheap)
 
 1. Purchase domain from Namecheap
 2. In Render, add custom domain to your services
-3. Update Namecheap DNS settings with Render's nameservers
-4. Wait for DNS propagation (24-48 hours)
+3. Update Namecheap DNS with Render's nameservers
+4. Wait 24–48 hours for DNS propagation
 
-## 🔒 Security Best Practices
+## 📅 Development Timeline
 
-- ✅ Never commit `.env` file to Git
-- ✅ Always hash passwords with bcrypt
-- ✅ Validate and sanitize all user inputs
-- ✅ Use HTTPS in production
-- ✅ Implement rate limiting
-- ✅ Use prepared statements for SQL queries
-- ✅ Set secure HTTP headers
+### Day 1 — Foundation & Auth ✅
+- [x] Project structure setup
+- [x] Database schema
+- [x] Register / Login endpoints
+- [x] Google OAuth
+- [x] JWT middleware
+- [x] Landing, login, register UI
 
-## 📚 Additional Resources
+### Day 2 — Core Features
+- [ ] Posts CRUD
+- [ ] Comment system
+- [ ] Like / unlike
+- [ ] Follow / unfollow
+- [ ] Feed page
+- [ ] Explore / search page
+- [ ] Profile page
+- [ ] Deploy to Render
 
-- [TiDB Cloud Documentation](https://docs.pingcap.com/tidbcloud/)
+### Day 3 — Polish & Launch
+- [ ] Bug fixes and testing
+- [ ] UI polish + responsive design
+- [ ] Trade alerts feature
+- [ ] Domain setup
+- [ ] Go live 🚀
+
+## 🔒 Security
+
+- Never commit `.env` to Git
+- Passwords hashed with bcrypt
+- Input validation and sanitization
+- HTTPS in production
+- Rate limiting enabled
+- Prepared statements for SQL
+- Secure HTTP headers
+
+## 📚 Resources
+
+- [TiDB Cloud Docs](https://docs.pingcap.com/tidbcloud/)
 - [Express.js Guide](https://expressjs.com/)
 - [JWT.io](https://jwt.io/)
 - [Google OAuth Setup](https://developers.google.com/identity/protocols/oauth2)
 - [Render Deployment Guide](https://render.com/docs)
-
-## 🤝 Contributing
-
-This is a portfolio project. Feel free to fork and customize for your own use!
 
 ## 📄 License
 

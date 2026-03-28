@@ -23,7 +23,7 @@
             <div class="nav-links">
                 <a href="feed.html">Feed</a>
                 <a href="explore.html">Explore</a>
-                <a href="#" id="profileLink" class="active">Profile</a>
+                <a href="profile.html" id="profileLink" class="active">Profile</a>
                 <button class="btn-secondary" id="logoutBtn">Logout</button>
             </div>
         </div>
@@ -33,15 +33,15 @@
     <div class="profile-header">
         <div class="container">
             <div class="profile-info">
-                <img id="profileAvatar" src="https://ui-avatars.com/api/?name=User" alt="Profile" class="profile-avatar-large">
+                <img id="profileAvatar" src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" alt="Profile" class="profile-avatar-large">
                 <div class="profile-details">
                     <h1 id="profileName">Loading...</h1>
                     <p id="profileEmail" class="text-muted"></p>
                     <p id="profileBio"></p>
                     <div class="profile-meta">
-                        <span id="tradingStyle" class="badge"></span>
-                        <span id="experienceLevel" class="badge"></span>
-                        <a id="portfolioLink" href="#" target="_blank" class="link" style="display: none;">Portfolio</a>
+                        <span id="tradingStyle" class="badge badge-primary"></span>
+                        <span id="experienceLevel" class="badge badge-success"></span>
+                        <a id="portfolioLink" href="#" target="_blank" class="link" style="display: none;">🔗 Portfolio</a>
                     </div>
                     <div class="profile-stats">
                         <div class="stat">
@@ -58,8 +58,7 @@
                         </div>
                     </div>
                     <div class="profile-actions" id="profileActions">
-                        <button class="btn-primary" id="editProfileBtn" style="display: none;">Edit Profile</button>
-                        <!-- Follow button will be inserted here if not own profile -->
+                        <!-- Actions will be inserted here (Follow/Edit Profile) -->
                     </div>
                 </div>
             </div>
@@ -67,11 +66,11 @@
     </div>
 
     <!-- Profile Tabs -->
-    <div class="profile-tabs">
-        <div class="container">
-            <button class="tab-btn active" data-tab="posts">Posts</button>
-            <button class="tab-btn" data-tab="followers">Followers</button>
-            <button class="tab-btn" data-tab="following">Following</button>
+    <div class="container">
+        <div class="profile-tabs">
+            <button class="tab-btn active" data-tab="posts">📝 Posts</button>
+            <button class="tab-btn" data-tab="followers">👥 Followers</button>
+            <button class="tab-btn" data-tab="following">➕ Following</button>
         </div>
     </div>
 
@@ -83,29 +82,45 @@
                 <div id="userPosts" class="posts-container">
                     <!-- User posts will be loaded here -->
                 </div>
+                <div id="postsEmpty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No posts yet</h3>
+                    <p>Start sharing your trading insights!</p>
+                </div>
             </div>
 
             <!-- Followers Tab -->
             <div id="followersTab" class="tab-content">
-                <div id="followersList" class="users-grid">
+                <div id="followersList" class="traders-grid">
                     <!-- Followers will be loaded here -->
+                </div>
+                <div id="followersEmpty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">👤</div>
+                    <h3>No followers yet</h3>
+                    <p>Share great content to attract followers!</p>
                 </div>
             </div>
 
             <!-- Following Tab -->
             <div id="followingTab" class="tab-content">
-                <div id="followingList" class="users-grid">
+                <div id="followingList" class="traders-grid">
                     <!-- Following will be loaded here -->
+                </div>
+                <div id="followingEmpty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">🔍</div>
+                    <h3>Not following anyone yet</h3>
+                    <p>Explore traders to find interesting people to follow!</p>
+                    <button class="btn-primary" onclick="window.location.href='explore.html'">Explore Traders</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Edit Profile Modal -->
-    <div id="editProfileModal" class="modal">
+    <div id="editProfileModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Edit Profile</h3>
+                <h3>✏️ Edit Profile</h3>
                 <button class="modal-close" id="closeModalBtn">&times;</button>
             </div>
             <form id="editProfileForm" class="modal-form">
@@ -115,7 +130,7 @@
                 </div>
                 <div class="form-group">
                     <label for="editBio">Bio</label>
-                    <textarea id="editBio" name="bio" rows="3"></textarea>
+                    <textarea id="editBio" name="bio" rows="3" placeholder="Tell us about your trading journey..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="editTradingStyle">Trading Style</label>
@@ -147,16 +162,41 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
-                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="submit" class="btn-primary">💾 Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="../js/config.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/profile.js"></script>
+
+    <!-- Profile & Logout Fix -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileLink = document.getElementById('profileLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Profile link (already on profile page, but keep for consistency)
+        if (profileLink) {
+            profileLink.addEventListener('click', (e) => {
+                window.location.href = 'profile.html';
+            });
+        }
+        
+        // Logout button
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    Auth.logout();
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../css/feed.css">
     <title>Feed - TradeConnect</title>
     
-    <!-- Load CSS in this ORDER -->
+    <link rel="stylesheet" href="../css/feed.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-auth">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="feed.html"><h1>📈 TradeConnect</h1></a>
-            </div>
-            <div class="nav-links">
-                <a href="feed.html" class="active">Feed</a>
-                <a href="explore.html">Explore</a>
-                <a href="#" id="profileLink">Profile</a>
-                <button class="btn-secondary" id="logoutBtn">Logout</button>
-            </div>
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <div class="nav-brand">
+          <div class="nav-logo-wrap">
+            <a href="index.html" class="nav-logo" aria-label="TradeConnect">
+              <img src="../assets/logo.svg" alt="TradeConnect" width="36" height="36">
+            </a>
+            <span class="nav-logo-label">TradeConnect</span>
+          </div>
         </div>
+        <div class="nav-center">
+          <a href="feed.html" class="active">Feed</a>
+          <a href="explore.html">Explore</a>
+          <a href="profile.html" id="profileLink">Profile</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-btn-ghost" id="logoutBtn">Logout</button>
+        </div>
+      </div>
     </nav>
 
     <!-- Main Content -->
@@ -31,9 +37,9 @@
                 <!-- Left Sidebar -->
                 <aside class="sidebar-left">
                     <div class="profile-card">
-                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" alt="Profile" class="profile-avatar">
+                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" alt="Profile" class="profile-avatar">
                         <h3 id="userName">Loading...</h3>
-                        <p id="userBio" class="text-muted"></p>
+                        <p id="userBio" class="text-muted">Your trading journey starts here</p>
                         <div class="profile-stats">
                             <div class="stat">
                                 <span class="stat-value" id="userPosts">0</span>
@@ -57,56 +63,131 @@
                         <a href="#" class="market-link" data-market="Stocks">📈 Stocks</a>
                         <a href="#" class="market-link" data-market="Commodities">🛢️ Commodities</a>
                     </div>
+
+                    <div class="sidebar-nav-card">
+                      <h4>Explore</h4>
+                      <a href="#" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">🎬</span>
+                        <span>Reels</span>
+                        <span class="sidebar-nav-badge">New</span>
+                      </a>
+                      <a href="#" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">👥</span>
+                        <span>Groups</span>
+                      </a>
+                      <a href="#" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">📄</span>
+                        <span>Pages</span>
+                      </a>
+                      <a href="#" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">🔔</span>
+                        <span>Alerts</span>
+                      </a>
+                      <a href="#" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">🔖</span>
+                        <span>Saved Posts</span>
+                      </a>
+                    </div>
                 </aside>
 
                 <!-- Main Feed -->
                 <main class="feed-main">
-                    <!-- Create Post -->
+                    <!-- Stories Section -->
+                    <div class="stories-section">
+                      <div class="stories-track">
+                        <!-- Create Story -->
+                        <div class="story-card story-create">
+                          <div class="story-create-img">
+                            <img id="storyUserAvatar" src="https://ui-avatars.com/api/?name=User&background=7B61FF&color=fff" alt="You">
+                          </div>
+                          <div class="story-create-icon">+</div>
+                          <span class="story-name">Create story</span>
+                        </div>
+                        <!-- Story items — populated by JS or static placeholders -->
+                        <div class="story-card" style="--story-bg:linear-gradient(160deg,#1a1030,#0d0d1f)">
+                          <div class="story-avatar-ring">
+                            <img src="https://ui-avatars.com/api/?name=Alex+T&background=7B61FF&color=fff" alt="Alex">
+                          </div>
+                          <div class="story-overlay"></div>
+                          <span class="story-name">Alex T.</span>
+                        </div>
+                        <div class="story-card" style="--story-bg:linear-gradient(160deg,#0d2010,#081208)">
+                          <div class="story-avatar-ring">
+                            <img src="https://ui-avatars.com/api/?name=Maria+S&background=32D583&color=fff" alt="Maria">
+                          </div>
+                          <div class="story-overlay"></div>
+                          <span class="story-name">Maria S.</span>
+                        </div>
+                        <div class="story-card" style="--story-bg:linear-gradient(160deg,#1a1000,#100800)">
+                          <div class="story-avatar-ring">
+                            <img src="https://ui-avatars.com/api/?name=Jin+K&background=F9C449&color=111" alt="Jin">
+                          </div>
+                          <div class="story-overlay"></div>
+                          <span class="story-name">Jin K.</span>
+                        </div>
+                        <div class="story-card" style="--story-bg:linear-gradient(160deg,#1a0010,#0f0008)">
+                          <div class="story-avatar-ring">
+                            <img src="https://ui-avatars.com/api/?name=Sam+R&background=F97066&color=fff" alt="Sam">
+                          </div>
+                          <div class="story-overlay"></div>
+                          <span class="story-name">Sam R.</span>
+                        </div>
+                        <div class="story-card" style="--story-bg:linear-gradient(160deg,#0d1020,#080c18)">
+                          <div class="story-avatar-ring">
+                            <img src="https://ui-avatars.com/api/?name=Chloe+B&background=5E6AD2&color=fff" alt="Chloe">
+                          </div>
+                          <div class="story-overlay"></div>
+                          <span class="story-name">Chloe B.</span>
+                        </div>
+                        <!-- Next arrow -->
+                        <button class="stories-next" id="storiesNext">&#8250;</button>
+                      </div>
+                    </div>
+
+                    <!-- Create Post — compact -->
                     <div class="create-post-card">
-                        <form id="createPostForm">
-                            <textarea 
-                                id="postContent" 
-                                placeholder="Share your trading strategy or insight..."
-                                rows="3"
-                                required
-                            ></textarea>
-                            
-                            <div class="post-options">
-                                <div class="post-tags">
-                                    <select id="marketTag" name="market_tag">
-                                        <option value="">Select Market</option>
-                                        <option value="Forex">Forex</option>
-                                        <option value="Crypto">Crypto</option>
-                                        <option value="Stocks">Stocks</option>
-                                        <option value="Commodities">Commodities</option>
-                                    </select>
-                                    <input 
-                                        type="text" 
-                                        id="strategyTag" 
-                                        name="strategy_tag" 
-                                        placeholder="Strategy tag (e.g., Technical Analysis)"
-                                    >
-                                    <input 
-                                        type="url" 
-                                        id="imageUrl" 
-                                        name="image_url" 
-                                        placeholder="Image URL (optional)"
-                                    >
-                                </div>
-                                <button type="submit" class="btn-primary" id="postBtn">Post</button>
-                            </div>
-                        </form>
+                      <form id="createPostForm">
+                        <div class="create-post-row">
+                          <img id="userAvatarPost" src="https://ui-avatars.com/api/?name=User&background=7B61FF&color=fff" alt="You" class="post-avatar-sm">
+                          <input type="text" id="postContentTrigger" class="post-trigger-input" placeholder="What's your trading insight today?" readonly>
+                          <button type="button" class="btn-primary" id="postTriggerBtn">Post</button>
+                        </div>
+                      </form>
+                    </div>
+
+                    <!-- Create Post Expanded (hidden by default) -->
+                    <div class="create-post-expanded" id="createPostExpanded" style="display:none;">
+                      <form id="createPostFormFull">
+                        <textarea id="postContent" placeholder="Share your trading strategy, analysis, or market insights..." rows="3" required></textarea>
+                        <div class="post-options">
+                          <div class="post-tags">
+                            <select id="marketTag" name="market_tag">
+                              <option value="">Select Market</option>
+                              <option value="Forex">Forex</option>
+                              <option value="Crypto">Crypto</option>
+                              <option value="Stocks">Stocks</option>
+                              <option value="Commodities">Commodities</option>
+                            </select>
+                            <input type="text" id="strategyTag" name="strategy_tag" placeholder="Strategy tag">
+                            <input type="url" id="imageUrl" name="image_url" placeholder="Image URL (optional)">
+                          </div>
+                          <div class="post-actions-row">
+                            <button type="button" class="btn-ghost" id="cancelPostBtn">Cancel</button>
+                            <button type="submit" class="btn-primary" id="postBtn">Post</button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
 
                     <!-- Feed Filter -->
                     <div class="feed-filter">
-                        <button class="filter-btn active" data-filter="feed">Following</button>
-                        <button class="filter-btn" data-filter="all">All Posts</button>
+                        <button class="filter-btn active" data-filter="feed">👥 Following</button>
+                        <button class="filter-btn" data-filter="all">🌍 All Posts</button>
                     </div>
 
                     <!-- Loading State -->
-                    <div id="loadingState" class="loading-state">
-                        <p>Loading posts...</p>
+                    <div id="loadingState" class="loading">
+                        <div class="loading-spinner"></div>
                     </div>
 
                     <!-- Posts Container -->
@@ -114,23 +195,33 @@
                         <!-- Posts will be loaded here dynamically -->
                     </div>
 
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>No posts yet</h3>
+                        <p>Be the first to share your trading insights!</p>
+                        <button class="btn-primary" onclick="document.getElementById('postContent').focus()">Create Post</button>
+                    </div>
+
                     <!-- Load More -->
                     <div class="load-more" id="loadMoreContainer" style="display: none;">
-                        <button class="btn-secondary" id="loadMoreBtn">Load More</button>
+                        <button class="btn-secondary" id="loadMoreBtn">Load More Posts</button>
                     </div>
                 </main>
 
                 <!-- Right Sidebar -->
                 <aside class="sidebar-right">
                     <div class="suggestions-card">
-                        <h4>Suggested Traders</h4>
+                        <h4>👤 Suggested Traders</h4>
                         <div id="suggestedTraders">
-                            <!-- Suggested traders will be loaded here -->
+                            <p class="loading-state">
+                                Loading suggestions...
+                            </p>
                         </div>
                     </div>
 
                     <div class="trending-card">
-                        <h4>Trending Markets</h4>
+                        <h4>🔥 Trending Markets</h4>
                         <div class="trending-list">
                             <div class="trending-item">
                                 <span class="trending-name">💱 EUR/USD</span>
@@ -144,6 +235,10 @@
                                 <span class="trending-name">📈 AAPL</span>
                                 <span class="trending-change negative">-1.2%</span>
                             </div>
+                            <div class="trending-item">
+                                <span class="trending-name">🛢️ Gold</span>
+                                <span class="trending-change positive">+0.8%</span>
+                            </div>
                         </div>
                     </div>
                 </aside>
@@ -151,38 +246,119 @@
         </div>
     </div>
 
-    <!-- Comments Modal -->
-    <div id="commentsModal" class="modal">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3>Comments</h3>
-                <button class="modal-close" id="closeCommentsBtn">&times;</button>
-            </div>
-            
-            <div class="modal-body" id="commentsContainer">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <form id="addCommentForm" class="comment-form">
-                    <input 
-                        type="text" 
-                        id="commentContent" 
-                        placeholder="Add a comment..." 
-                        required
-                    >
-                    <button type="submit" class="btn-primary btn-small">Post</button>
-                </form>
-            </div>
-        </div>
-    </div>
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/feed.js"></script>
 
-<script src="../js/config.js"></script>
-<script src="../js/api.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/auth.js"></script>
-<script src="../js/feed.js"></script>
+    <!-- Profile & Logout Fix -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileLink = document.getElementById('profileLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Profile link - already has href="profile.html" but ensure it works
+        if (profileLink) {
+            profileLink.addEventListener('click', (e) => {
+                window.location.href = 'profile.html';
+            });
+        }
+        
+        // Logout button
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    Auth.logout();
+                }
+            });
+        }
+    });
+    </script>
+
+    <!-- Post expand / collapse -->
+    <script>
+    (function() {
+      const trigger  = document.getElementById('postContentTrigger');
+      const postBtn  = document.getElementById('postTriggerBtn');
+      const expanded = document.getElementById('createPostExpanded');
+      const cancel   = document.getElementById('cancelPostBtn');
+      const compact  = document.querySelector('.create-post-card');
+
+      function openPost() {
+        expanded.style.display = 'block';
+        compact.style.display  = 'none';
+        document.getElementById('postContent').focus();
+      }
+      function closePost() {
+        expanded.style.display = 'none';
+        compact.style.display  = 'block';
+      }
+      if (trigger)  trigger.addEventListener('click',  openPost);
+      if (postBtn)  postBtn.addEventListener('click',  openPost);
+      if (cancel)   cancel.addEventListener('click',   closePost);
+
+      // Stories next scroll
+      const storiesNext = document.getElementById('storiesNext');
+      const track = document.querySelector('.stories-track');
+      if (storiesNext && track) {
+        storiesNext.addEventListener('click', () => {
+          track.scrollBy({ left: 240, behavior: 'smooth' });
+        });
+      }
+    })();
+    </script>
+
+    <!-- Post menu + comments JS -->
+    <script>
+    (function() {
+      const menu    = document.getElementById('postMenuDropdown');
+      const closeComments = document.getElementById('closeCommentsBtn');
+      const commentsModal = document.getElementById('commentsModal');
+      let activePostId = null;
+
+      // Close menu on outside click
+      document.addEventListener('click', e => {
+        if (menu && !menu.contains(e.target) && !e.target.classList.contains('post-menu-btn')) {
+          menu.style.display = 'none';
+        }
+      });
+
+      // Delegate: post menu button
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('.post-menu-btn');
+        if (!btn) return;
+        e.stopPropagation();
+        activePostId = btn.dataset.postId;
+        const rect = btn.getBoundingClientRect();
+        menu.style.display = 'block';
+        menu.style.top  = (rect.bottom + 6 + window.scrollY) + 'px';
+        menu.style.left = Math.min(rect.left, window.innerWidth - 200) + 'px';
+      });
+
+      // Delegate: open comments
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('.comment-action-btn');
+        if (!btn) return;
+        activePostId = btn.dataset.postId;
+        if (commentsModal) commentsModal.classList.add('open');
+      });
+
+      // Close comments
+      if (closeComments) closeComments.addEventListener('click', () => {
+        commentsModal.classList.remove('open');
+      });
+
+      // Menu actions
+      const editBtn   = document.getElementById('menuEditBtn');
+      const deleteBtn = document.getElementById('menuDeleteBtn');
+      const saveBtn   = document.getElementById('menuSaveBtn');
+
+      if (editBtn)   editBtn.addEventListener('click',   () => { menu.style.display='none'; /* TODO: edit post */ });
+      if (deleteBtn) deleteBtn.addEventListener('click', () => { menu.style.display='none'; if(confirm('Delete this post?')) { /* TODO: delete */ } });
+      if (saveBtn)   saveBtn.addEventListener('click',   () => { menu.style.display='none'; /* TODO: save */ });
+    })();
+    </script>
 </body>
 </html>

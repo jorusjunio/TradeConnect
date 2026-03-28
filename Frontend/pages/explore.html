@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../css/explore.css">
     <title>Explore - TradeConnect</title>
     
     <!-- Load CSS in this ORDER -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -18,7 +23,7 @@
             <div class="nav-links">
                 <a href="feed.html">Feed</a>
                 <a href="explore.html" class="active">Explore</a>
-                <a href="#" id="profileLink">Profile</a>
+                <a href="profile.html" id="profileLink">Profile</a>
                 <button class="btn-secondary" id="logoutBtn">Logout</button>
             </div>
         </div>
@@ -27,7 +32,7 @@
     <!-- Explore Header -->
     <div class="explore-header">
         <div class="container">
-            <h1>Discover Traders</h1>
+            <h1>🔍 Discover Traders</h1>
             <p>Find and connect with traders from around the world</p>
         </div>
     </div>
@@ -36,12 +41,13 @@
     <div class="search-section">
         <div class="container">
             <div class="search-container">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Search traders by name or email..."
-                    class="search-input"
-                >
+                <div class="search-input">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="🔎 Search traders by name or email..."
+                    >
+                </div>
                 <button class="btn-primary" id="searchBtn">Search</button>
             </div>
 
@@ -62,7 +68,7 @@
                     <option value="expert">Expert</option>
                 </select>
 
-                <button class="btn-secondary" id="resetFiltersBtn">Reset Filters</button>
+                <button class="btn-secondary" id="resetFiltersBtn">🔄 Reset Filters</button>
             </div>
         </div>
     </div>
@@ -71,7 +77,8 @@
     <div class="main-content">
         <div class="container">
             <!-- Loading State -->
-            <div id="loadingState" class="loading-state">
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
                 <p>Loading traders...</p>
             </div>
 
@@ -82,21 +89,56 @@
 
             <!-- Empty State -->
             <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">🤷</div>
                 <h3>No traders found</h3>
                 <p>Try adjusting your search or filters</p>
+                <button class="btn-primary" id="resetFromEmptyBtn">Clear Filters</button>
             </div>
 
             <!-- Load More -->
-            <div class="load-more" id="loadMoreContainer" style="display: none;">
-                <button class="btn-secondary" id="loadMoreBtn">Load More</button>
+            <div class="load-more" id="loadMoreContainer" style="display: none; text-align: center; margin-top: 2rem;">
+                <button class="btn-secondary" id="loadMoreBtn">Load More Traders</button>
             </div>
         </div>
     </div>
 
-<script src="../js/config.js"></script>
-<script src="../js/api.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/auth.js"></script>
-<script src="../js/explore.js"></script>
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/explore.js"></script>
+
+    <!-- Profile & Logout Fix -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileLink = document.getElementById('profileLink');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Profile link
+        if (profileLink) {
+            profileLink.addEventListener('click', (e) => {
+                window.location.href = 'profile.html';
+            });
+        }
+        
+        // Logout button
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    Auth.logout();
+                }
+            });
+        }
+
+        // Reset from empty state
+        const resetFromEmptyBtn = document.getElementById('resetFromEmptyBtn');
+        if (resetFromEmptyBtn) {
+            resetFromEmptyBtn.addEventListener('click', () => {
+                document.getElementById('resetFiltersBtn').click();
+            });
+        }
+    });
+    </script>
 </body>
 </html>
